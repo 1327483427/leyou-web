@@ -13,11 +13,14 @@
 </template>
 
 <script>
+  import {treeData} from "../../mockDB";
+
   export default {
     name: "category",
     data() {
       return {
-        isEdit:true
+        isEdit:true,
+        treeData
       }
     },
     methods: {
@@ -25,8 +28,8 @@
         console.log("add .... ");
         console.log(node);
       },
-      handleEdit(id, name) {
-        console.log("edit... id: " + id + ", name: " + name)
+      handleEdit(id,name) {
+        console.log("edit... id: " + id + name )
       },
       handleDelete(id) {
         console.log("delete ... " + id)
