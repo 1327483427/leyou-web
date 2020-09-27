@@ -47,7 +47,7 @@
         </v-toolbar>
         <!--对话框的内容，表单-->
         <v-card-text class="px-5" style="height:400px">
-          <brand-form @close="closeWindow" :oldBrand="oldBrand" :isEdit="isEdit"/>
+          <brand-form @close="closeWindow" :oldBrand="oldBrand" :isEdit="isEdit" :reload="getDataFromServer"/>
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -124,6 +124,7 @@
         this.oldBrand = null;
       },
       editBrand(oldBrand){
+
         // 根据品牌信息查询商品分类
         this.$http.get("/item/category/bid/" + oldBrand.id)
           .then(({data}) => {
@@ -136,6 +137,23 @@
             // 回显商品分类
             this.oldBrand.categories = data;
           })
+      },
+      deleteBrand(oldBrand){
+          if (oldBrand.id!=null) {
+            this.$message.confirm('此操作将永久删除该品牌, 是否继续?').then(
+              () => {
+                //发起删除请求，删除单条数据
+                this.$http.delete("/item/brand/bid/" + oldBrand.id).then(() => {
+                  this.$message.success("删除成功！");
+                  this.getDataFromServer();
+                }).catch(() => {
+                  this.$message.error("删除失败！");
+                })
+              }
+            ).catch(() => {
+              this.$message.info("删除已取消！");
+            });
+          }
       },
       closeWindow(){
         // 重新加载数据
